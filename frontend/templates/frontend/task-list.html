@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+<h1><b>ToDo App</b></h1>
+<hr>
+<form id="task-form" action="" method="post">
+    {% csrf_token %}
+    <div class="field">
+        <div class="control">
+            <input class="input" name="title" id="title" type="text" placeholder="Title">
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <textarea class="textarea" name="description" id="description" placeholder="Task Description" rows="2"></textarea>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <input type="submit" class="button is-primary is-light" name="submit">
+        </div>
+    </div>
+</form>
+<br>
+<div id="task-box">
+
+</div>
+<script src="{% static 'main.js' %}"></script>
+{% endblock content %}
