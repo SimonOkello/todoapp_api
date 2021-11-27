@@ -1,7 +1,6 @@
 from django.urls import path
 
 from .views import (
-    apiIndex,
     taskList,
     taskDetail,
     createTask,
@@ -10,7 +9,6 @@ from .views import (
 )
 app_name = 'api'
 urlpatterns = [
-    path('', apiIndex, name='index'),
     path('tasks/', taskList, name='task-list'),
     path('tasks/<str:pk>/detail/', taskDetail, name='task-detail'),
     path('create-task/', createTask, name='create-task'),
