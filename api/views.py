@@ -2,15 +2,14 @@ import re
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import TaskSerializer
 from .models import Task
 
 # Create your views here.
 
-
 class TaskListView(ListAPIView):
-    model = Task
+    model =Task
     serializer_class = TaskSerializer
     queryset = Task.objects.all().order_by('-created_at')
 
@@ -23,8 +22,9 @@ class TaskListView(ListAPIView):
 
 
 class TaskDetail(RetrieveAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+     queryset = Task.objects.all()
+     serializer_class = TaskSerializer
+
 
 
 # @api_view(['GET'])
@@ -38,34 +38,18 @@ class CreateTask(CreateAPIView):
     serializer_class = TaskSerializer
 
 
-# @api_view(['POST'])
-# def createTask(request):
-#     serializer = TaskSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=201)
-#     return Response(serializer.errors, status=400)
+
+@api_view(['POST'])
+def updateTask(request, pk):
+    task = Task.objects.get(pk=pk)
+    serializer = TaskSerializer(instance=task, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
 
 
-class UpdateTask(UpdateAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-
-
-# @api_view(['POST'])
-# def updateTask(request, pk):
-#     task = Task.objects.get(pk=pk)
-#     serializer = TaskSerializer(instance=task, data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-
-class DeleteTask(DestroyAPIView):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-
-# @api_view(['DELETE'])
-# def deleteTask(request, pk):
-#     task = Task.objects.get(pk=pk)
-#     task.delete()
-#     return Response("Item successfully deleted")
+@api_view(['DELETE'])
+def deleteTask(request, pk):
+    task = Task.objects.get(pk=pk)
+    task.delete()
+    return Response("Item successfully deleted")
