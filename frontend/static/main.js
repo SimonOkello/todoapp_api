@@ -3,7 +3,7 @@ var list_snapshot = []
 function showList() {
     const taskBox = document.getElementById('task-box')
 
-    const url = 'http://127.0.0.1:8000/api/tasks/'
+    const url = 'https://api-for-todoapp.herokuapp.com/api/tasks/'
     fetch(url)
         .then((resp) => resp.json())
         .then((data) => {
@@ -100,10 +100,10 @@ const taskForm = document.getElementById('task-form')
 var activeItem = null
 taskForm.addEventListener('submit', function (e) {
     e.preventDefault()
-    var url = 'http://127.0.0.1:8000/api/create-task/'
+    var url = 'https://api-for-todoapp.herokuapp.com/api/create-task/'
 
     if (activeItem != null) {
-        var url = `http://127.0.0.1:8000/api/tasks/${activeItem.id}/update/`
+        var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${activeItem.id}/update/`
         activeItem = null
     }
     var title = document.getElementById('title').value
@@ -130,7 +130,7 @@ function editTask(item) {
 
 // DELETE TASK
 function deleteTask(item) {
-    var url = `http://127.0.0.1:8000/api/tasks/${item.id}/delete/`
+    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/delete/`
     fetch(url, {
         method: 'DELETE',
         headers: {
@@ -144,7 +144,7 @@ function deleteTask(item) {
 
 // STRIKE & UNSTRIKE TASK
 function strikeUnstrikeTask(item) {
-    var url = `http://127.0.0.1:8000/api/tasks/${item.id}/update/`
+    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/update/`
     item.complete = !item.complete
     fetch(url, {
         method: 'POST',
