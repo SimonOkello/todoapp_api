@@ -149,7 +149,7 @@ function strikeUnstrikeTask(item) {
     var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/`
     item.complete = !item.complete
     fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
