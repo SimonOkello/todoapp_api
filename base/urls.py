@@ -40,4 +40,5 @@ urlpatterns = [
                                        cache_timeout=0), name='schema-redoc'),
     path('api/', include('api.urls', namespace='api')),
     path('frontend', include('frontend.urls', namespace='frontend')),
+    path('api-auth/', include('rest_framework.urls')),
 ]

@@ -1,47 +1,44 @@
-import re
+from django.http import request
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, RetrieveAPIView
+from rest_framework import permissions
 from rest_framework.response import Response
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, UserSerializer
+from django.contrib.auth.models import User
 from .models import Task
+from .permissions import isOwnerOrReadOnly
 
 # Create your views here.
 
 
-@api_view(['GET'])
-def taskList(request):
-    tasks = Task.objects.all().order_by('-created_at')
-    serializer = TaskSerializer(tasks, many=True)
-    return Response(serializer.data)
+class TaskList(ListCreateAPIView):
+    queryset = Task.objects.select_related('owner').all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
 
 
-@api_view(['GET'])
-def taskDetail(request, pk):
-    task = Task.objects.get(pk=pk)
-    serializer = TaskSerializer(task, many=False)
-    return Response(serializer.data)
+class TaskDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.select_related('owner').all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated, isOwnerOrReadOnly]
 
 
-@api_view(['POST'])
-def createTask(request):
-    serializer = TaskSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+# USER VIEWS
+
+class UserList(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated,]
 
 
-@api_view(['POST'])
-def updateTask(request, pk):
-    task = Task.objects.get(pk=pk)
-    serializer = TaskSerializer(instance=task, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-
-
-@api_view(['DELETE'])
-def deleteTask(request, pk):
-    task = Task.objects.get(pk=pk)
-    task.delete()
-    return Response("Item successfully deleted")
+class UserDetail(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
