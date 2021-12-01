@@ -100,10 +100,10 @@ const taskForm = document.getElementById('task-form')
 var activeItem = null
 taskForm.addEventListener('submit', function (e) {
     e.preventDefault()
-    var url = 'https://api-for-todoapp.herokuapp.com/api/create-task/'
+    var url = 'https://api-for-todoapp.herokuapp.com/api/tasks/'
 
     if (activeItem != null) {
-        var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${activeItem.id}/update/`
+        var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${activeItem.id}/`
         activeItem = null
     }
     var title = document.getElementById('title').value
@@ -130,7 +130,7 @@ function editTask(item) {
 
 // DELETE TASK
 function deleteTask(item) {
-    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/delete/`
+    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/`
     fetch(url, {
         method: 'DELETE',
         headers: {
@@ -144,7 +144,7 @@ function deleteTask(item) {
 
 // STRIKE & UNSTRIKE TASK
 function strikeUnstrikeTask(item) {
-    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/update/`
+    var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${item.id}/`
     item.complete = !item.complete
     fetch(url, {
         method: 'POST',
