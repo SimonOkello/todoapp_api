@@ -101,15 +101,17 @@ var activeItem = null
 taskForm.addEventListener('submit', function (e) {
     e.preventDefault()
     var url = 'https://api-for-todoapp.herokuapp.com/api/tasks/'
+    var request_method ='POST'
 
     if (activeItem != null) {
         var url = `https://api-for-todoapp.herokuapp.com/api/tasks/${activeItem.id}/`
+        var request_method ='PUT'
         activeItem = null
     }
     var title = document.getElementById('title').value
     var description = document.getElementById('description').value
     fetch(url, {
-        method: 'POST',
+        method: request_method,
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
